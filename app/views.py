@@ -2,7 +2,7 @@ from django.shortcuts import render
 from app.forms import *
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core.mail import send_mail # send_email ,THIS IS FOR SENDING ONLY ONE MAIL, 
-                                    # IF WE WANT TO SEND MULTIPLE MAILS MEANS USE   send_mass_mail 
+# IF WE WANT TO SEND MULTIPLE MAILS MEANS USE   send_mass_mail 
 
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
@@ -69,9 +69,29 @@ def user_login(request):
 
     return render(request,'user_login.html')
 
+#THIS IS FOR USER LOGOUT
 
 @login_required
+
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
 
+@login_required
+def profile_display(request):
+    username=request.session.get('username')
+    UO=User.objects.get(username=username)
+    PO=Profile.objects.get(username=UO)
+    d={'UO':UO,'PO':PO}
+    return render(request,'profile_display.html',d)
+
+@login_required
+def change_password(request):
+    if request.method=='POST':
+        username=request.session.get('username')
+        UO=User.objects.get(username=username)
+        nw=request.POST['nw']
+        UO.set_password(nw)
+        UO.save()
+        return HttpResponse('Password Changed Successfully')
+    return render(request,'change_password.html')

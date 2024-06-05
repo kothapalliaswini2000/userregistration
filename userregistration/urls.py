@@ -26,6 +26,8 @@ urlpatterns = [
     path('home/',home,name='home'),
     path('user_login/',user_login,name='user_login'),
     path('user_logout/',user_logout,name='user_logout'),
+    path('profile_display/',profile_display,name='profile_display'),
+    path('change_password/',change_password,name='change_password'),
 
 
   
